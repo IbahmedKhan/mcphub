@@ -65,7 +65,18 @@ All through natural language.
 
 ## Quick Start
 
-### Installation
+### Option 1: Docker (Recommended)
+
+```bash
+git clone https://github.com/IbahmedKhan/mcphub.git
+cd mcphub
+docker build -t mcphub .
+docker run -p 8000:8000 mcphub
+```
+
+Open `http://localhost:8000` — full dashboard with all 6 servers running.
+
+### Option 2: Manual Installation
 
 ```bash
 git clone https://github.com/IbahmedKhan/mcphub.git

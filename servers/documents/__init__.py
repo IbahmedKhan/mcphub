@@ -1,0 +1,1 @@
+"""Document Analyzer MCP Server"""

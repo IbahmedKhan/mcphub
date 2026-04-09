@@ -1,0 +1,42 @@
+name: MCPHub CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio
+
+      - name: Run tests
+        run: |
+          python -m pytest tests/ -v --tb=short
+
+      - name: Test imports
+        run: |
+          python -c "from orchestrator.main import app; print('Orchestrator OK')"
+          python -c "from servers.security.scanner import SecurityScanner; print('Security OK')"
+          python -c "from servers.database.engine import DatabaseEngine; print('Database OK')"
+          python -c "from servers.notifications.hub import NotificationHub; print('Notifications OK')"
+          python -c "from servers.documents.analyzer import DocumentAnalyzer; print('Documents OK')"
+          python -c "from servers.api_gateway.gateway import APIGateway; print('API Gateway OK')"
+          python -c "from servers.system_monitor.monitor import SystemMonitor; print('System Monitor OK')"

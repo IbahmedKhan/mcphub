@@ -81,8 +81,9 @@ class TestSSLChecker:
 
     @pytest.mark.asyncio
     async def test_invalid_hostname(self, scanner):
-        result = await scanner.check_ssl("this-does-not-exist-12345.com")
-        assert result["valid"] is False
+        # SSRF protection blocks unresolvable hostnames before SSL check
+        with pytest.raises(ValueError, match="Cannot resolve"):
+            await scanner.check_ssl("this-does-not-exist-12345.com")
 
 
 class TestHeaderChecker:
